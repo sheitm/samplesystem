@@ -1,0 +1,4 @@
+name: consumer
+port: 8080
+postgres:
+  port: 5432

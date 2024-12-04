@@ -1,0 +1,8 @@
+name: test-system
+owner: stale.heitmann@hafslund.no
+monthlyBudgetNOK: 100000
+environments:
+  - name: test
+    monthlyBudgetNOK: 10000
+  - name: prod
+    monthlyBudgetNOK: 90000

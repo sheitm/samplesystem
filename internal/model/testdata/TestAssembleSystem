@@ -1,0 +1,41 @@
+(*model.System)({
+  Name: (string) (len=11) "test-system",
+  Owner: (string) (len=26) "stale.heitmann@hafslund.no",
+  MonthlyBudgetNOK: (int) 100000,
+  Environments: ([]model.Environment) (len=2) {
+    (model.Environment) {
+      Name: (string) (len=4) "test",
+      MonthlyBudgetNOK: (int) 10000
+    },
+    (model.Environment) {
+      Name: (string) (len=4) "prod",
+      MonthlyBudgetNOK: (int) 90000
+    }
+  },
+  Apps: ([]model.App) (len=3) {
+    (model.App) {
+      Name: (string) (len=5) "api-1",
+      Port: (int) 8082,
+      Postgres: (model.Postgres) {
+        Port: (int) 0
+      },
+      Directory: (string) (len=31) "testdata/cmd/apis/api1/app.yaml"
+    },
+    (model.App) {
+      Name: (string) (len=8) "consumer",
+      Port: (int) 8080,
+      Postgres: (model.Postgres) {
+        Port: (int) 5432
+      },
+      Directory: (string) (len=30) "testdata/cmd/consumer/app.yaml"
+    },
+    (model.App) {
+      Name: (string) (len=8) "producer",
+      Port: (int) 8081,
+      Postgres: (model.Postgres) {
+        Port: (int) 0
+      },
+      Directory: (string) (len=30) "testdata/cmd/producer/app.yaml"
+    }
+  }
+})
