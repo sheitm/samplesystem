@@ -1,15 +1,16 @@
 package compose
 
 import (
+	"github.com/HafslundEcoVannkraft/samplesystem/internal/model"
 	composetypes "github.com/compose-spec/compose-go/v2/types"
 	"gopkg.in/yaml.v2"
 )
 
-func Compose() ([]byte, error) {
+func Compose(sys *model.System) ([]byte, error) {
 	proj := composetypes.Project{
 		Name:             "",
 		WorkingDir:       "",
-		Services:         nil,
+		Services:         map[string]composetypes.ServiceConfig{},
 		Networks:         nil,
 		Volumes:          nil,
 		Secrets:          nil,

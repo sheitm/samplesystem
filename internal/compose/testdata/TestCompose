@@ -1,0 +1,20 @@
+services:
+  otel-lgtm:
+    healthcheck:
+      test:
+      - CMD
+      - curl
+      - -f
+      - http://localhost:3000/health
+      timeout: 10s
+      interval: 10s
+      retries: 5
+    image: grafana/otel-lgtm
+    ports:
+    - target: 3000
+      published: "3000"
+    - target: 4317
+      published: "4317"
+    - target: 4318
+      published: "4318"
+
