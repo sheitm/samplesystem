@@ -1,0 +1,41 @@
+name: simple-app
+services:
+    otel-lgtm:
+        healthcheck:
+            test:
+                - CMD
+                - curl
+                - -f
+                - http://localhost:3000/health
+            timeout: 10s
+            interval: 10s
+            retries: 5
+        image: grafana/otel-lgtm
+        ports:
+            - target: 3000
+              published: "8120"
+            - target: 4317
+              published: "22353"
+            - target: 4318
+              published: "22352"
+    simple-app:
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+        depends_on:
+            otel-lgtm:
+                condition: service_healthy
+                required: true
+        environment:
+            ELBITS_APP_NAME: simple-app
+            ELBITS_ENVIRONMENT_NAME: local
+            ELBITS_HEALTH_PATH: /health
+            ELBITS_SYSTEM_NAME: simple-app
+            OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-lgtm:4318
+            OTEL_METRIC_EXPORT_INTERVAL: "5000"
+            OTEL_SERVICE_NAME: simple-app
+            PORT: "3000"
+        ports:
+            - target: 3000
+              published: "3000"
+
