@@ -1,3 +1,4 @@
+name: test
 services:
   otel-lgtm:
     healthcheck:
@@ -17,4 +18,14 @@ services:
       published: "4317"
     - target: 4318
       published: "4318"
+  test:
+    build:
+      context: .
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://localhost:4318
+      OTEL_METRIC_EXPORT_INTERVAL: "5000"
+      OTEL_SERVICE_NAME: test
+    ports:
+    - target: 80
+      published: "3000"
 

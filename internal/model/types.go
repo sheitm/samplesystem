@@ -18,8 +18,9 @@ type Postgres struct {
 }
 
 type App struct {
-	Name      string   `yaml:"name"`
-	Port      int      `yaml:"port"`
-	Postgres  Postgres `yaml:"postgres"`
-	Directory string   `yaml:"directory"`
+	Name       string   `yaml:"name"`
+	Port       int      `yaml:"port"`
+	Postgres   Postgres `yaml:"postgres"`
+	Directory  string   `yaml:"directory"`
+	Dockerfile string   `yaml:"dockerfile"` // Path to Dockerfile. If empty, a default Dockerfile will be generated.
 }

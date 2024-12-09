@@ -12,29 +12,29 @@ const (
 	lgtmServiceName = "otel-lgtm"
 	lgtmImageName   = "grafana/otel-lgtm"
 
-	// Internal port numbers for the LGTM container.
+	// Internal publishedPort numbers for the LGTM container.
 	portLgtmUI   = 3000
 	portLgtmGRPC = 4317
 	portLgtmHTTP = 4318
 )
 
 // applyLGTM adds the LGTM stack to the compose project.
-func applyLGTM(project composetypes.Project) (composetypes.Project, error) {
-	srv := lgmtService{
+func applyLGTM(cCtx composeContext) error {
+	srv := &lgtmService{
 		UIHostPort:   portLgtmUI,
 		GRPCHostPort: portLgtmGRPC,
 		HTTPHostPort: portLgtmHTTP,
 	}
 
-	cfg := srv.ServiceConfig()
+	//cfg := srv.ServiceConfig()
 
-	project.Services[lgtmServiceName] = cfg
-	return project, nil
+	cCtx.addApp(lgtmServiceName, srv)
+	return nil
 
 	//if xiter.Empty2(opts.RunnableApps()) {
 	//	return project, nil
 	//}
-	//lgtm := lgmtService{
+	//lgtm := lgtmService{
 	//	Options:      opts,
 	//	UIHostPort:   opts.AssignHostPort(LGTMServiceName, portLgtmUI, DefaultGrafanaPort),
 	//	HTTPHostPort: opts.AssignHostPort(LGTMServiceName, portLgtmHTTP, useDefaultHostPort),
@@ -72,14 +72,18 @@ func applyLGTM(project composetypes.Project) (composetypes.Project, error) {
 	//return project, nil
 }
 
-type lgmtService struct {
+type lgtmService struct {
 	//Options      *Options
 	UIHostPort   uint16
 	GRPCHostPort uint16
 	HTTPHostPort uint16
 }
 
-func (s lgmtService) ServiceConfig() composetypes.ServiceConfig {
+func (s *lgtmService) name() string {
+	return lgtmServiceName
+}
+
+func (s *lgtmService) serviceConfig() composetypes.ServiceConfig {
 	return composetypes.ServiceConfig{
 		Name:  lgtmServiceName,
 		Image: lgtmImageName,
@@ -102,8 +106,8 @@ func (s lgmtService) ServiceConfig() composetypes.ServiceConfig {
 	}
 }
 
-// HTTPConnString creats the connection string for the HTTP service.
-func (s lgmtService) HTTPConnString(hostNetworking bool) string {
+// HTTPConnString creates the connection string for the HTTP service.
+func (s *lgtmService) HTTPConnString(hostNetworking bool) string {
 	host := "localhost"
 	port := s.HTTPHostPort
 
@@ -121,6 +125,20 @@ func (s lgmtService) HTTPConnString(hostNetworking bool) string {
 	}
 
 	return u.String()
+}
+
+func (s *lgtmService) addEnvVars(env map[string]string) {}
+
+func (s *lgtmService) emitEnvVars(app composableApp) {
+	app.addEnvVars(s.envVars())
+}
+
+func (s *lgtmService) envVars() map[string]string {
+	return map[string]string{
+		"OTEL_EXPORTER_OTLP_ENDPOINT": "http://localhost:4318",
+		"OTEL_METRIC_EXPORT_INTERVAL": "5000",
+		"OTEL_SERVICE_NAME":           "test",
+	}
 }
 
 func ptr[T any](v T) *T {
