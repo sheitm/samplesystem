@@ -12,19 +12,25 @@ func AssembleSystem(opts ...AssemblyOption) (*System, error) {
 		opt(collector)
 	}
 
-	dir := collector.directory
-	if dir == "" {
-		var err error
-		dir, err = os.Getwd()
-		if err != nil {
-			return nil, err
+	f := collector.systemFile
+	if f == "" {
+		dir := collector.directory
+		if dir == "" {
+			var err error
+			dir, err = os.Getwd()
+			if err != nil {
+				return nil, err
+			}
 		}
+		f = filepath.Join(dir, "system.yaml")
 	}
 
-	sys, err := readSystemYaml(dir)
+	sys, err := readSystemYaml(f)
 	if err != nil {
 		return nil, err
 	}
+
+	dir := filepath.Dir(f)
 
 	apps, err := traverseAndReadApps(dir)
 	if err != nil {
@@ -36,7 +42,8 @@ func AssembleSystem(opts ...AssemblyOption) (*System, error) {
 }
 
 type assemblyOptionsCollector struct {
-	directory string
+	directory  string
+	systemFile string
 }
 
 type AssemblyOption func(*assemblyOptionsCollector)
@@ -47,8 +54,13 @@ func FromDirectory(directory string) AssemblyOption {
 	}
 }
 
-func readSystemYaml(dir string) (*System, error) {
-	systemFile := filepath.Join(dir, "system.yaml")
+func WithSystemFile(systemFile string) AssemblyOption {
+	return func(c *assemblyOptionsCollector) {
+		c.systemFile = systemFile
+	}
+}
+
+func readSystemYaml(systemFile string) (*System, error) {
 	data, err := os.ReadFile(systemFile)
 	if err != nil {
 		return nil, err
