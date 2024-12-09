@@ -74,7 +74,7 @@ func traverseAndReadApps(dir string) ([]App, error) {
 			if err != nil {
 				return err
 			}
-			app.Directory = path //filepath.Dir(path)
+			app.Directory = filepath.Dir(path)
 			apps = append(apps, *app)
 		}
 		return nil

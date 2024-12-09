@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/HafslundEcoVannkraft/samplesystem/internal/model"
 	composetypes "github.com/compose-spec/compose-go/v2/types"
+	"path"
 )
 
 func applyApp(cCtx composeContext, app model.App) error {
@@ -41,12 +42,13 @@ func (a *appService) serviceConfig() composetypes.ServiceConfig {
 	for k, v := range a.envVars {
 		env[k] = &v
 	}
+
 	return composetypes.ServiceConfig{
 		Name:        a.name(),
 		Environment: env,
 		Build: &composetypes.BuildConfig{
 			Context:    ".",
-			Dockerfile: a.app.Dockerfile,
+			Dockerfile: path.Join(a.app.Directory, a.app.Dockerfile),
 		},
 		Ports: []composetypes.ServicePortConfig{
 			{

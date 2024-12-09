@@ -18,9 +18,10 @@ services:
       published: "4317"
     - target: 4318
       published: "4318"
-  test:
+  simple-app:
     build:
       context: .
+      dockerfile: /cmd/simple-app/Dockerfile
     environment:
       OTEL_EXPORTER_OTLP_ENDPOINT: http://localhost:4318
       OTEL_METRIC_EXPORT_INTERVAL: "5000"

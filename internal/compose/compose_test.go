@@ -19,9 +19,10 @@ var composeTestCases = []composeTestCase{
 			Owner: "test",
 			Apps: []model.App{
 				{
-					Name:      "test",
-					Port:      80,
-					Directory: "/",
+					Name:       "simple-app",
+					Port:       80,
+					Directory:  "/cmd/simple-app",
+					Dockerfile: "Dockerfile",
 				},
 			},
 		},

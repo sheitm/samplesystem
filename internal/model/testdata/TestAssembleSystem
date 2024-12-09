@@ -19,7 +19,7 @@
       Postgres: (model.Postgres) {
         Port: (int) 0
       },
-      Directory: (string) (len=31) "testdata/cmd/apis/api1/app.yaml",
+      Directory: (string) (len=22) "testdata/cmd/apis/api1",
       Dockerfile: (string) ""
     },
     (model.App) {
@@ -28,7 +28,7 @@
       Postgres: (model.Postgres) {
         Port: (int) 5432
       },
-      Directory: (string) (len=30) "testdata/cmd/consumer/app.yaml",
+      Directory: (string) (len=21) "testdata/cmd/consumer",
       Dockerfile: (string) ""
     },
     (model.App) {
@@ -37,7 +37,7 @@
       Postgres: (model.Postgres) {
         Port: (int) 0
       },
-      Directory: (string) (len=30) "testdata/cmd/producer/app.yaml",
+      Directory: (string) (len=21) "testdata/cmd/producer",
       Dockerfile: (string) ""
     }
   }
